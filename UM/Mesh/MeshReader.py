@@ -2,7 +2,7 @@
 # Uranium is released under the terms of the LGPLv3 or higher.
 from typing import Union, List
 
-import UM.Application
+#import UM.Application
 from UM.FileHandler.FileReader import FileReader
 from UM.Scene.SceneNode import SceneNode
 
@@ -17,7 +17,7 @@ class MeshReader(FileReader):
     #   \return node \type{SceneNode} or \type{list(SceneNode)} The SceneNode or SceneNodes read from file.
     def read(self, file_name: str) -> Union[SceneNode, List[SceneNode]]:
         result = self._read(file_name)
-        UM.Application.Application.getInstance().getController().getScene().addWatchedFile(file_name)
+        #UM.Application.Application.getInstance().getController().getScene().addWatchedFile(file_name)
         return result
 
     def _read(self, file_name: str) -> Union[SceneNode, List[SceneNode]]:

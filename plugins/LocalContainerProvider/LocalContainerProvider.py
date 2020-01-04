@@ -213,7 +213,7 @@ class LocalContainerProvider(ContainerProvider):
     def _loadCachedDefinition(self, definition_id) -> Optional[DefinitionContainer]:
         definition_path = self._id_to_path[definition_id]
         try:
-            cache_path = Resources.getPath(Resources.Cache, "definitions", Application.getInstance().getVersion(), definition_id)
+            cache_path = Resources.getPath(Resources.Cache, "definitions", 'master', definition_id)
             cache_mtime = os.path.getmtime(cache_path)
             definition_mtime = os.path.getmtime(definition_path)
         except FileNotFoundError:  # Cache doesn't exist yet.
@@ -249,7 +249,7 @@ class LocalContainerProvider(ContainerProvider):
     #
     #   \param definition The definition container to store.
     def _saveCachedDefinition(self, definition: DefinitionContainer) -> None:
-        cache_path = Resources.getStoragePath(Resources.Cache, "definitions", Application.getInstance().getVersion(), definition.id)
+        cache_path = Resources.getStoragePath(Resources.Cache, "definitions", 'master', definition.id)
 
         # Ensure the cache path exists.
         try:

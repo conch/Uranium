@@ -370,7 +370,7 @@ class ContainerRegistry(ContainerRegistryInterface):
         # triggering this signal again, which eventually can end up exceeding the max recursion limit.
         # We avoid the direct calls here to make sure that the subscribers do not need to take into account any max
         # recursion problem.
-        self._application.callLater(self.containerAdded.emit, container)
+        #self._application.callLater(self.containerAdded.emit, container)
 
     @UM.FlameProfiler.profile
     def removeContainer(self, container_id: str) -> None:
