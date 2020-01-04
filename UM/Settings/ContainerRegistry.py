@@ -485,6 +485,39 @@ class ContainerRegistry(ContainerRegistryInterface):
             unique_name = "%s #%d" % (name, i) #Fill name like this: "Extruder #2".
         return unique_name
 
+    ##  Create a name that is not empty and unique
+    #   \param container_type \type{string} Type of the container (machine, quality, ...)
+    #   \param current_name \type{} Current name of the container, which may be an acceptable option
+    #   \param new_name \type{string} Base name, which may not be unique
+    #   \param fallback_name \type{string} Name to use when (stripped) new_name is empty
+    #   \return \type{string} Name that is unique for the specified type and name/id
+    def createUniqueName(self, container_type: str, current_name: str, new_name: str, fallback_name: str) -> str:
+        new_name = new_name.strip()
+        num_check = re.compile(r"(.*?)\s*#\d+$").match(new_name)
+        if num_check:
+            new_name = num_check.group(1)
+        if new_name == "":
+            new_name = fallback_name
+
+        unique_name = new_name
+        i = 1
+        # In case we are renaming, the current name of the container is also a valid end-result
+        while self._containerExists(container_type, unique_name) and unique_name != current_name:
+            i += 1
+            unique_name = "%s #%d" % (new_name, i)
+
+        return unique_name
+
+    ##  Check if a container with of a certain type and a certain name or id exists
+    #   Both the id and the name are checked, because they may not be the same and it is better if they are both unique
+    #   \param container_type \type{string} Type of the container (machine, quality, ...)
+    #   \param container_name \type{string} Name to check
+    def _containerExists(self, container_type: str, container_name: str):
+        container_class = ContainerStack if container_type == "machine" else InstanceContainer
+
+        return self.findContainersMetadata(container_type = container_class, id = container_name, type = container_type, ignore_case = True) or \
+                self.findContainersMetadata(container_type = container_class, name = container_name, type = container_type)
+
     ##  Add a container type that will be used to serialize/deserialize containers.
     #
     #   \param container An instance of the container type to add.
