@@ -463,9 +463,10 @@ class SceneNode:
         elif transform_space == SceneNode.TransformSpace.Parent:
             self._transformation.preMultiply(orientation_matrix)
         elif transform_space == SceneNode.TransformSpace.World:
+            world_transformation = self._world_transformation.copy()
             self._transformation.multiply(self._world_transformation.getInverse())
             self._transformation.multiply(orientation_matrix)
-            self._transformation.multiply(self._world_transformation)
+            self._transformation.multiply(world_transformation)
 
         self._transformChanged()
 
